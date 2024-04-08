@@ -1,0 +1,23 @@
+{
+  "name": "core",
+  "version": "0.0.3",
+  "description": "",
+  "main": "cli.js",
+  "type": "module",
+  "bin": {
+    "core": "./cli.js"
+  },
+  "scripts": {
+    "dev": ""
+  },
+  "keywords": [
+    "sveltekit",
+    "svelet",
+    "cli"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "sade": "^1.8.1"
+  }
+}
