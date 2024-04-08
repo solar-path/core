@@ -1,3 +1,28 @@
+# install cli
+
+> > > sudo npm i -g
+> > > chmod +x cli.js
+
+# use
+
+core -h
+
+# functions
+
+1. create a new Sveltekit project and install dependencies
+
+# git
+
+echo "# core" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/solar-path/core.git
+git push -u origin main
+
+# draft code
+
 #!/usr/bin/env node
 
 import path from "path";
@@ -7,11 +32,11 @@ import { readFileSync, renameSync, existsSync } from "fs";
 
 let pjson;
 try {
-  const pkgPath = new URL("./package.json", import.meta.url);
-  const pkgData = readFileSync(pkgPath);
-  pjson = JSON.parse(pkgData);
+const pkgPath = new URL("./package.json", import.meta.url);
+const pkgData = readFileSync(pkgPath);
+pjson = JSON.parse(pkgData);
 } catch (err) {
-  console.error("Error reading package.json:", err);
+console.error("Error reading package.json:", err);
 }
 
 const prog = sade("core");
@@ -19,11 +44,11 @@ const prog = sade("core");
 prog.version(pjson.version);
 
 prog
-  .command("new <name>")
-  .describe("Create a new Sveltekit app from a github repo.")
-  .example("new myapp")
-  .action((name, options, opts) => {
-    console.log(`• Creating a new Sveltekit project named ${name}`);
+.command("new <name>")
+.describe("Create a new Sveltekit app from a github repo.")
+.example("new myapp")
+.action((name, options, opts) => {
+console.log(`• Creating a new Sveltekit project named ${name}`);
 
     const createSvelteProcess = spawn(
       "git",
@@ -45,23 +70,19 @@ prog
               `Sveltekit project named ${name} created successfully!`
             );
       });
-  });
+
+});
 
 prog
-  .command("deploy <name>")
-  .describe("install packages for <name>.")
-  .example("core deploy")
-  .action((name, options, opts) => {
-    console.log(`• Deploying dependencies for ${name} `);
+.command("deploy")
+.describe("install packages.")
+.example("core deploy")
+.action((options, opts) => {
+console.log(`• Deploying dependencies `);
 
-    const currentDir = process.cwd(); // Get the current working directory
-
-    // Change directory to the project folder
-    process.chdir(path.join(currentDir, name));
-
-    // Renaming .env.example to .env if .env doesn't exist in the project folder
-    const envFilePath = path.join(currentDir, name, ".env");
-    const envExamplePath = path.join(currentDir, name, ".env.example");
+    // Renaming .env.example to .env if .env doesn't exist
+    const envFilePath = new URL(".env", import.meta.url).pathname;
+    const envExamplePath = new URL(".env.example", import.meta.url).pathname;
 
     if (!existsSync(envFilePath) && existsSync(envExamplePath)) {
       try {
@@ -72,7 +93,7 @@ prog
       }
     }
 
-    // Install dependencies in the project folder
+    // Install dependencies
     const installDependenciesProcess = spawn("npm", ["install"], {
       stdio: "inherit", // this will show the live output of the command
       shell: true,
@@ -86,10 +107,8 @@ prog
         code !== 0
           ? console.error(`The process exited with code ${code}`)
           : console.log(`Dependencies are installed correctly!`);
-
-        // Change back to the original directory after deployment
-        process.chdir(currentDir);
       });
-  });
+
+});
 
 prog.parse(process.argv);
