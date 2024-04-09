@@ -4,6 +4,7 @@ import path from "path";
 import sade from "sade";
 import { spawn } from "child_process";
 import { readFileSync, renameSync, existsSync } from "fs";
+import { createModel } from "./functions.js";
 
 let pjson;
 try {
@@ -92,16 +93,25 @@ prog
       });
   });
 
-prog.parse(process.argv);
 
+  prog
+  .command("g <component> <options>")
+  .describe("build at [./path/../ModuleName] model description.")
+  .example("core g ./test/src/routes/protected/ModuleName title:string, description:string")
+  .action((component, options, opts) => {
+    // Extract the path and moduleName
+    const modulePath = component.substring(0, component.lastIndexOf('/') + 1);
+    const moduleName = component.substring(component.lastIndexOf('/') + 1);
+    const modelPath = './src/lib/database/models/'
+    // Combine options and any additional options provided
+    const modelDescription = [options, ...opts._].join(' ');
 
-prog
-  .command("crud <destination> <ModuleName> <options>")
-  .describe("build at path-to-folder CRUD module <ModuleName>.")
-  .example("core crud <destination> <ModuleName> <options>")
-  .action((destination, ModuleName, options, opts) => {
-    console.log(`• Building CRUD module ${ModuleName} `);
+    console.log(`Path to model: ${modelPath}`)
+    console.log(`Path to component: ${modulePath}`);
+    console.log(`ModuleName: ${moduleName}`);
+    console.log(`ModelDescription: ${modelDescription}`);
 
-
+    // createModel(moduleName, modelDescription);
   });
 
+prog.parse(process.argv);

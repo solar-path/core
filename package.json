@@ -18,6 +18,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "g": "^2.0.1",
     "sade": "^1.8.1"
   }
 }
