@@ -19,15 +19,15 @@ const prog = sade("core");
 prog.version(pjson.version);
 
 prog
-  .command("new <name>")
+  .command("new <AppName>")
   .describe("Create a new Sveltekit app from a github repo.")
-  .example("new myapp")
-  .action((name, options, opts) => {
-    console.log(`• Creating a new Sveltekit project named ${name}`);
+  .example("new <AppName>")
+  .action((AppName, options, opts) => {
+    console.log(`• Creating a new Sveltekit project named ${AppName}`);
 
     const createSvelteProcess = spawn(
       "git",
-      ["clone", "https://github.com/solar-path/april.git", name],
+      ["clone", "https://github.com/solar-path/april.git", AppName],
       {
         stdio: "inherit", // this will show the live output of the command
         shell: true,
@@ -42,26 +42,26 @@ prog
         code !== 0
           ? console.error(`The process exited with code ${code}`)
           : console.log(
-              `Sveltekit project named ${name} created successfully!`
+              `Sveltekit project named ${AppName} created successfully!`
             );
       });
   });
 
 prog
-  .command("deploy <name>")
-  .describe("install packages for <name>.")
-  .example("core deploy")
-  .action((name, options, opts) => {
-    console.log(`• Deploying dependencies for ${name} `);
+  .command("deploy <AppName>")
+  .describe("install packages for <AppName>.")
+  .example("core deploy <AppName>")
+  .action((AppName, options, opts) => {
+    console.log(`• Deploying dependencies for ${AppName} `);
 
     const currentDir = process.cwd(); // Get the current working directory
 
     // Change directory to the project folder
-    process.chdir(path.join(currentDir, name));
+    process.chdir(path.join(currentDir, AppName));
 
     // Renaming .env.example to .env if .env doesn't exist in the project folder
-    const envFilePath = path.join(currentDir, name, ".env");
-    const envExamplePath = path.join(currentDir, name, ".env.example");
+    const envFilePath = path.join(currentDir, AppName, ".env");
+    const envExamplePath = path.join(currentDir, AppName, ".env.example");
 
     if (!existsSync(envFilePath) && existsSync(envExamplePath)) {
       try {
@@ -93,3 +93,15 @@ prog
   });
 
 prog.parse(process.argv);
+
+
+prog
+  .command("crud <destination> <ModuleName> <options>")
+  .describe("build at path-to-folder CRUD module <ModuleName>.")
+  .example("core crud <destination> <ModuleName> <options>")
+  .action((destination, ModuleName, options, opts) => {
+    console.log(`• Building CRUD module ${ModuleName} `);
+
+
+  });
+
