@@ -95,14 +95,14 @@ prog
 
 
   prog
-  .command("g <component> <options>")
-  .describe("build at [./path/../ModuleName] model description.")
-  .example("core g ./test/src/routes/protected/ModuleName title:string, description:string")
-  .action((component, options, opts) => {
+  .command("g <componentName> <options>")
+  .describe("build at [./path/../componentName] component description.")
+  .example("core g ./test/src/routes/protected/componentName title:string, description:string")
+  .action((componentName, options, opts) => {
     // Extract the path and moduleName
-    const modulePath = component.substring(0, component.lastIndexOf('/') + 1);
-    const moduleName = component.substring(component.lastIndexOf('/') + 1);
-    const modelPath = './src/lib/database/models/'
+    const modulePath = componentName.substring(0, componentName.lastIndexOf('/') + 1);
+    const moduleName = componentName.substring(componentName.lastIndexOf('/') + 1);
+    const modelPath = './src/lib/database/schema/'
     // Combine options and any additional options provided
     const modelDescription = [options, ...opts._].join(' ');
 
